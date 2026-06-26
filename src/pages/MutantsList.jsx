@@ -1,12 +1,15 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { getMutants } from "../api/mutants";
 
 export default function MutantsList() {
-  const mutants = [
-    { id: 1, name: "Logan", alias: "Wolverine", status: "Active" },
-    { id: 2, name: "Ororo Munroe", alias: "Storm", status: "Active" },
-    { id: 3, name: "Jean Grey", alias: "Phoenix", status: "Unknown" },
-  ];
+  const [mutants, setMutants] = useState([]);
+
+  useEffect(() => {
+    getMutants()
+      .then(setMutants)
+      .catch((err) => console.error("Failed to fetch mutants:", err));
+  }, []);
 
   return (
     <div className="page">
