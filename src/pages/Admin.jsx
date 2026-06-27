@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import { getTeams, createTeam, updateTeam, deleteTeam } from "../api/teams";
 import {
   getMutants,

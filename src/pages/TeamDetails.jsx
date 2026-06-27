@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link } from "react-router";
 import { getTeam } from "../api/teams";
 import { getMutants } from "../api/mutants";
 
