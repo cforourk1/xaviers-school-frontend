@@ -1,5 +1,5 @@
 import React from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router";
 import Layout from "./layout/Layout.jsx";
 import TeamsList from "./pages/TeamsList.jsx";
 import TeamDetail from "./pages/TeamDetail.jsx";
