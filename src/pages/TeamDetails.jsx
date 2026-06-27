@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { getTeamById } from "../api/teams";
+import { getTeam } from "../api/teams";
 import { getMutants } from "../api/mutants";
 
 export default function TeamDetails() {
@@ -11,7 +11,7 @@ export default function TeamDetails() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const teamData = await getTeamById(id);
+        const teamData = await getTeam(id);
         const allMutants = await getMutants();
         const teamMutants = allMutants.filter((m) => m.team_id === teamData.id);
         setTeam({ ...teamData, mutants: teamMutants });

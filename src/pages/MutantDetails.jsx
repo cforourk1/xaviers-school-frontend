@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { getMutantById } from "../api/mutants";
+import { getMutant } from "../api/mutants";
 
 export default function MutantDetails() {
   const { id } = useParams();
@@ -8,7 +8,7 @@ export default function MutantDetails() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    getMutantById(id)
+    getMutant(id)
       .then(setMutant)
       .catch((err) => {
         console.error("Failed to fetch mutant:", err);
