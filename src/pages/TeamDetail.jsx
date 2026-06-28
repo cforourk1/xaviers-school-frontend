@@ -57,7 +57,7 @@ useEffect(() => {
         <p>No mutants found for this team.</p>
       )}
 
-      <Link to="/teams">← Back to Teams</Link>
+     <Link to="/">← Back to Teams</Link>
     </div>
   );
 }
