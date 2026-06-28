@@ -1,36 +1,36 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router";
-import { Register, getMe } from "../api/users";
-import "../css/Register.css";
+import { register, getMe } from "../api/users";
+import "../css/Login.css";
 
 export default function Register({ setCurrentUser }) {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({ username: "", password: "" });
   const [error, setError] = useState(null);
 
-  // submits Register credentials to the backend
+  // submits registration to the backend
   // on success stores token, fetches user object, redirects to admin
   async function handleSubmit(e) {
     e.preventDefault();
     setError(null);
     try {
-      const token = await Register(formData.username, formData.password);
-      if (!token) throw new Error("Invalid credentials");
+      const token = await register(formData.username, formData.password);
+      if (!token) throw new Error("Registration failed");
       sessionStorage.setItem("token", token);
       // fetch the full user object including role and store in app state
       const user = await getMe(token);
       setCurrentUser(user);
       navigate("/admin");
     } catch (err) {
-      console.error("Register failed:", err);
-      setError("Register failed. Check your username and password.");
+      console.error("Registration failed:", err);
+      setError("Registration failed. Please try again.");
     }
   }
 
   return (
     <div className="auth-page">
       <div className="auth-card">
-        <h1>Admin Register</h1>
+        <h1>Create Admin Account</h1>
         <form className="auth-form" onSubmit={handleSubmit}>
           <label className="auth-label">
             Username
@@ -38,7 +38,7 @@ export default function Register({ setCurrentUser }) {
               type="text"
               value={formData.username}
               onChange={(e) => setFormData({ ...formData, username: e.target.value })}
-              placeholder="Enter username"
+              placeholder="Choose a username"
               required
               aria-label="Username"
             />
@@ -49,7 +49,7 @@ export default function Register({ setCurrentUser }) {
               type="password"
               value={formData.password}
               onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-              placeholder="Enter password"
+              placeholder="Choose a password"
               required
               aria-label="Password"
             />
@@ -60,8 +60,8 @@ export default function Register({ setCurrentUser }) {
         {error && <p className="auth-error" role="alert">{error}</p>}
 
         <p className="auth-switch">
-          Need an account?{" "}
-          <span onClick={() => navigate("/register")}>Register here</span>
+          Already have an account?{" "}
+          <span onClick={() => navigate("/login")}>Log in here</span>
         </p>
       </div>
     </div>
