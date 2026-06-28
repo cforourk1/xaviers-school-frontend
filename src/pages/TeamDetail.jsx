@@ -1,27 +1,26 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router";
 import { getTeamById } from "../api/teams";
-import { getMutants } from "../api/mutants";
+
 
 export default function TeamDetails() {
   const { id } = useParams();
   const [team, setTeam] = useState(null);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const teamData = await getTeamById(id);
-        const allMutants = await getMutants();
-        const teamMutants = allMutants.filter((m) => m.team_id === teamData.id);
-        setTeam({ ...teamData, mutants: teamMutants });
-      } catch (err) {
-        console.error(err);
-        setError("Unable to load team details.");
-      }
+useEffect(() => {
+  async function fetchData() {
+    try {
+      const teamData = await getTeamById(id);
+      setTeam(teamData);
+    } catch (err) {
+      console.error(err);
+      setError("Unable to load team details.");
     }
-    fetchData();
-  }, [id]);
+  }
+  fetchData();
+}, [id]);
+
 
   if (error) return <h2>{error}</h2>;
   if (!team) return <h2>Loading team details...</h2>;
