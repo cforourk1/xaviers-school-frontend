@@ -3,19 +3,12 @@ import { useNavigate, Link } from "react-router";
 import { getTeams, createTeam, updateTeam, deleteTeam } from "../api/teams";
 import "../css/Admin.css";
 
-export default function AdminTeams() {
+export default function AdminTeams({ currentUser }) {
   const navigate = useNavigate();
-
-  // get token from sessionStorage - if null redirect to login
   const token = sessionStorage.getItem("token");
 
-  // holds the full list of teams fetched from the backend
   const [teams, setTeams] = useState([]);
-
-  // holds the team currently being edited - null means nothing is being edited
   const [editingTeam, setEditingTeam] = useState(null);
-
-  // holds the values for the create new team form - starts empty
   const [teamForm, setTeamForm] = useState({
     name: "",
     base_of_operations: "",
@@ -33,8 +26,15 @@ export default function AdminTeams() {
     getTeams().then(setTeams);
   }, []);
 
+  // helper — returns true if the current user can edit/delete this record
+  // admin can edit anything, regular users can only edit what they created
+  function canEdit(record) {
+    if (!currentUser) return false;
+    if (currentUser.role === 'admin') return true;
+    return record.created_by === currentUser.id;
+  }
+
   // called when the create team form is submitted
-  // sends form data to backend, adds new team to list, resets form
   async function handleCreateTeam(e) {
     e.preventDefault();
     const newTeam = await createTeam(teamForm, token);
@@ -43,7 +43,6 @@ export default function AdminTeams() {
   }
 
   // called when the edit team form is submitted
-  // sends updated data to backend, replaces old team in list
   async function handleUpdateTeam(e) {
     e.preventDefault();
     await updateTeam(editingTeam.id, editingTeam, token);
@@ -99,7 +98,6 @@ export default function AdminTeams() {
 
         <h3>Existing teams</h3>
 
-        {/* list of all teams with image, name, base, edit and delete buttons */}
         <ul className="admin-list" aria-label="Existing teams">
           {teams.map(team => (
             <li key={team.id} className="admin-list-item">
@@ -115,11 +113,13 @@ export default function AdminTeams() {
                   <div className="admin-list-item-sub">{team.base_of_operations}</div>
                 </div>
               </div>
-              <div className="admin-list-item-actions">
-                {/* clicking edit stores this team in editingTeam state, showing the edit form */}
-                <button className="btn-edit" onClick={() => setEditingTeam(team)}>Edit</button>
-                <button className="btn-delete" onClick={() => handleDeleteTeam(team.id, team.name)}>Delete</button>
-              </div>
+              {/* only show edit/delete if user has permission */}
+              {canEdit(team) && (
+                <div className="admin-list-item-actions">
+                  <button className="btn-edit" onClick={() => setEditingTeam(team)}>Edit</button>
+                  <button className="btn-delete" onClick={() => handleDeleteTeam(team.id, team.name)}>Delete</button>
+                </div>
+              )}
             </li>
           ))}
         </ul>
@@ -128,7 +128,6 @@ export default function AdminTeams() {
         {editingTeam && (
           <div className="edit-form-wrapper">
             <h3>Editing: {editingTeam.name}</h3>
-            {/* inputs pre-filled with current team data - updates editingTeam as you type */}
             <form className="admin-form" onSubmit={handleUpdateTeam}>
               <input
                 value={editingTeam.name}
@@ -152,7 +151,6 @@ export default function AdminTeams() {
               />
               <div className="form-actions">
                 <button className="btn-primary" type="submit">Save changes</button>
-                {/* cancel clears editingTeam without saving */}
                 <button className="btn-cancel" type="button" onClick={() => setEditingTeam(null)}>Cancel</button>
               </div>
             </form>

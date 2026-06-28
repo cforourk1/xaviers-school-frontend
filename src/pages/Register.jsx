@@ -1,15 +1,15 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router";
-import { register } from "../api/users";
+import { register, getMe } from "../api/users";
 import "../css/Login.css";
 
-export default function Register() {
+export default function Register({ setCurrentUser }) {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({ username: "", password: "" });
   const [error, setError] = useState(null);
 
-  // submits registration to backend
-  // on success stores token and redirects to admin
+  // submits registration to the backend
+  // on success stores token, fetches user object, redirects to admin
   async function handleSubmit(e) {
     e.preventDefault();
     setError(null);
@@ -17,9 +17,12 @@ export default function Register() {
       const token = await register(formData.username, formData.password);
       if (!token) throw new Error("Registration failed");
       sessionStorage.setItem("token", token);
+      // fetch the full user object including role and store in app state
+      const user = await getMe(token);
+      setCurrentUser(user);
       navigate("/admin");
     } catch (err) {
-      console.error("Registration error:", err);
+      console.error("Registration failed:", err);
       setError("Registration failed. Please try again.");
     }
   }

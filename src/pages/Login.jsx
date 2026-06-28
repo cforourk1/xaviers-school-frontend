@@ -1,15 +1,15 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router";
-import { login } from "../api/users";
+import { login, getMe } from "../api/users";
 import "../css/Login.css";
 
-export default function Login() {
+export default function Login({ setCurrentUser }) {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({ username: "", password: "" });
   const [error, setError] = useState(null);
 
   // submits login credentials to the backend
-  // on success stores token in sessionStorage and redirects to admin
+  // on success stores token, fetches user object, redirects to admin
   async function handleSubmit(e) {
     e.preventDefault();
     setError(null);
@@ -17,6 +17,9 @@ export default function Login() {
       const token = await login(formData.username, formData.password);
       if (!token) throw new Error("Invalid credentials");
       sessionStorage.setItem("token", token);
+      // fetch the full user object including role and store in app state
+      const user = await getMe(token);
+      setCurrentUser(user);
       navigate("/admin");
     } catch (err) {
       console.error("Login failed:", err);
