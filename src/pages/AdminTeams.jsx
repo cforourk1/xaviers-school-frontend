@@ -43,7 +43,7 @@ export default function AdminTeams() {
   }
 
   // called when the edit team form is submitted
-  // sends updated data to backend, replaces old team in list, closes form
+  // sends updated data to backend, replaces old team in list
   async function handleUpdateTeam(e) {
     e.preventDefault();
     await updateTeam(editingTeam.id, editingTeam, token);

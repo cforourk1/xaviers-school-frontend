@@ -45,7 +45,7 @@ export default function AdminMutants() {
   }
 
   // called when the edit mutant form is submitted
-  // sends updated data to backend, replaces old mutant in list, closes form
+  // sends updated data to backend, replaces old mutant in list
   async function handleUpdateMutant(e) {
     e.preventDefault();
     await updateMutant(editingMutant.id, editingMutant, token);
