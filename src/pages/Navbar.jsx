@@ -1,9 +1,11 @@
 import React from "react";
 import { Link, useNavigate } from "react-router";
-
+import "../css/Navbar.css";
 
 export default function Navbar() {
   const navigate = useNavigate();
+
+  // check if user is logged in by looking for token in sessionStorage
   const token = sessionStorage.getItem("token");
 
   function handleLogout() {
@@ -15,14 +17,15 @@ export default function Navbar() {
     <nav className="navbar">
       <div className="navbar-left">
         <Link to="/" className="nav-logo">
-          X‑Men Registry
+          X-Men<br />Registry
         </Link>
       </div>
 
       <div className="navbar-links">
-        <Link to="/">| Teams |</Link>
-        <Link to="/mutants">| Mutants |</Link>
+        <Link to="/">Teams</Link>
+        <Link to="/mutants">Mutants</Link>
 
+        {/* show admin link and logout only when logged in */}
         {token ? (
           <>
             <Link to="/admin">Admin</Link>
@@ -32,8 +35,8 @@ export default function Navbar() {
           </>
         ) : (
           <>
-            <Link to="/login">| Login |</Link>
-            <Link to="/register">| Register |</Link>
+            <Link to="/login">Login</Link>
+            <Link to="/register">Register</Link>
           </>
         )}
       </div>

@@ -1,12 +1,15 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router";
 import { register } from "../api/users";
+import "../css/Login.css";
 
 export default function Register() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({ username: "", password: "" });
   const [error, setError] = useState(null);
 
+  // submits registration to backend
+  // on success stores token and redirects to admin
   async function handleSubmit(e) {
     e.preventDefault();
     setError(null);
@@ -22,47 +25,42 @@ export default function Register() {
   }
 
   return (
-    <div className="page">
-      <h1>Create an Admin Account</h1>
-      <form onSubmit={handleSubmit}>
-        <label>
-          Username:
-          <input
-            type="text"
-            value={formData.username}
-            onChange={(e) =>
-              setFormData({ ...formData, username: e.target.value })
-            }
-            required
-          />
-        </label>
-        <label>
-          Password:
-          <input
-            type="password"
-            value={formData.password}
-            onChange={(e) =>
-              setFormData({ ...formData, password: e.target.value })
-            }
-            required
-          />
-        </label>
-        <button type="submit">Register</button>
-      </form>
-      {error && (
-        <p role="alert" style={{ color: "red" }}>
-          {error}
+    <div className="auth-page">
+      <div className="auth-card">
+        <h1>Create Admin Account</h1>
+        <form className="auth-form" onSubmit={handleSubmit}>
+          <label className="auth-label">
+            Username
+            <input
+              type="text"
+              value={formData.username}
+              onChange={(e) => setFormData({ ...formData, username: e.target.value })}
+              placeholder="Choose a username"
+              required
+              aria-label="Username"
+            />
+          </label>
+          <label className="auth-label">
+            Password
+            <input
+              type="password"
+              value={formData.password}
+              onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+              placeholder="Choose a password"
+              required
+              aria-label="Password"
+            />
+          </label>
+          <button className="auth-submit" type="submit">Register</button>
+        </form>
+
+        {error && <p className="auth-error" role="alert">{error}</p>}
+
+        <p className="auth-switch">
+          Already have an account?{" "}
+          <span onClick={() => navigate("/login")}>Log in here</span>
         </p>
-      )}
-      <p>
-        Already have an account?{" "}
-        <span
-          style={{ color: "blue", cursor: "pointer" }}
-          onClick={() => navigate("/login")}
-        >
-          Log in here
-        </span>
-      </p>
+      </div>
     </div>
   );
 }

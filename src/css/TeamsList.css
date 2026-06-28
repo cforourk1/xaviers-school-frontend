@@ -1,0 +1,86 @@
+/* ── Teams List Page ── */
+
+.teams-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 3rem 2rem;
+  text-align: center;
+}
+
+.teams-title {
+  font-size: 2.4rem;
+  color: #ffd700;
+  text-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
+  margin-bottom: 2.5rem;
+  letter-spacing: 0.1em;
+}
+
+.teams-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.5rem;
+  width: 90%;
+  max-width: 1100px;
+}
+
+.team-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 215, 0, 0.3);
+  border-radius: 12px;
+  padding: 1.5rem;
+  backdrop-filter: blur(6px);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  text-align: center;
+}
+
+.team-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 0 24px rgba(255, 215, 0, 0.3);
+}
+
+.team-card img {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  border: 1px solid rgba(255, 215, 0, 0.2);
+}
+
+.team-name {
+  font-size: 1.3rem;
+  color: #ffd700;
+  margin: 0 0 0.4rem 0;
+}
+
+.team-base {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.5);
+  margin: 0 0 1rem 0;
+}
+
+.team-link {
+  display: inline-block;
+  color: #ff0040;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  text-decoration: none;
+  letter-spacing: 0.08em;
+  transition: color 0.2s;
+}
+
+.team-link:hover {
+  color: #ffd700;
+}
+
+.loading, .error {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 1rem;
+  margin-top: 3rem;
+}
+
+.error {
+  color: #ff4060;
+}

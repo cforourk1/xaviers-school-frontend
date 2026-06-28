@@ -7,6 +7,8 @@ import MutantsList from "./pages/MutantsList.jsx";
 import MutantDetail from "./pages/MutantDetail.jsx";
 import Login from "./pages/Login.jsx";
 import Register from "./pages/Register.jsx";
+import AdminTeams from "./pages/AdminTeams";
+import AdminMutants from "./pages/AdminMutants";
 import Admin from "./pages/Admin.jsx";
 import Error404 from "./pages/Error404.jsx";
 import "./App.css";
@@ -32,7 +34,8 @@ export default function App() {
         <Route path="login" element={<Login />} />
         <Route path="register" element={<Register />} />
         <Route path="admin" element={<Admin />} />
-
+<Route path="admin/teams" element={<AdminTeams />} />
+<Route path="admin/mutants" element={<AdminMutants />} />
         {/* Catch-all for unknown routes */}
         <Route path="*" element={<Error404 />} />
       </Route>

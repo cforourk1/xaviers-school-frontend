@@ -1,12 +1,15 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router";
 import { login } from "../api/users";
+import "../css/Login.css";
 
 export default function Login() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({ username: "", password: "" });
   const [error, setError] = useState(null);
 
+  // submits login credentials to the backend
+  // on success stores token in sessionStorage and redirects to admin
   async function handleSubmit(e) {
     e.preventDefault();
     setError(null);
@@ -17,52 +20,47 @@ export default function Login() {
       navigate("/admin");
     } catch (err) {
       console.error("Login failed:", err);
-      setError("Login failed. Please check your username and password.");
+      setError("Login failed. Check your username and password.");
     }
   }
 
   return (
-    <div className="page">
-      <h1>Admin Login</h1>
-      <form onSubmit={handleSubmit}>
-        <label>
-          Username:
-          <input
-            type="text"
-            value={formData.username}
-            onChange={(e) =>
-              setFormData({ ...formData, username: e.target.value })
-            }
-            required
-          />
-        </label>
-        <label>
-          Password:
-          <input
-            type="password"
-            value={formData.password}
-            onChange={(e) =>
-              setFormData({ ...formData, password: e.target.value })
-            }
-            required
-          />
-        </label>
-        <button type="submit">Login</button>
-      </form>
-      {error && (
-        <p role="alert" style={{ color: "red" }}>
-          {error}
+    <div className="auth-page">
+      <div className="auth-card">
+        <h1>Admin Login</h1>
+        <form className="auth-form" onSubmit={handleSubmit}>
+          <label className="auth-label">
+            Username
+            <input
+              type="text"
+              value={formData.username}
+              onChange={(e) => setFormData({ ...formData, username: e.target.value })}
+              placeholder="Enter username"
+              required
+              aria-label="Username"
+            />
+          </label>
+          <label className="auth-label">
+            Password
+            <input
+              type="password"
+              value={formData.password}
+              onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+              placeholder="Enter password"
+              required
+              aria-label="Password"
+            />
+          </label>
+          <button className="auth-submit" type="submit">Login</button>
+        </form>
+
+        {error && <p className="auth-error" role="alert">{error}</p>}
+
+        <p className="auth-switch">
+          Need an account?{" "}
+          <span onClick={() => navigate("/register")}>Register here</span>
         </p>
-      )}
-      <p>
-        Need an account?{" "}
-        <span
-          style={{ color: "blue", cursor: "pointer" }}
-          onClick={() => navigate("/register")}
-        >
-          Register here
-        </span>
-      </p>
+      </div>
     </div>
   );
 }

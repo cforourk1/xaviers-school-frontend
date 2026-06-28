@@ -1,55 +1,61 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router";
 import { getTeamById } from "../api/teams";
+import "../css/TeamDetail.css";
 
-
-export default function TeamDetails() {
+export default function TeamDetail() {
   const { id } = useParams();
   const [team, setTeam] = useState(null);
   const [error, setError] = useState(null);
 
-/* updated this useEffect to handle the team info. based on the change made to the junction table on the back end. use effect cannot handle async directly so another function exists inside it. then the try anc catch error to see if the team exists.
-
-*/
-useEffect(() => {
-  async function fetchData() {
-    try {
-      const teamData = await getTeamById(id);
-      setTeam(teamData);
-    } catch (err) {
-      console.error(err);
-      setError("Unable to load team details.");
+  // fetch team by id - mutants are already included in the response
+  // useEffect cannot be async directly so we define fetchData inside it
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const teamData = await getTeamById(id);
+        setTeam(teamData);
+      } catch (err) {
+        console.error(err);
+        setError("Unable to load team details.");
+      }
     }
-  }
-  fetchData();
-}, [id]);
+    fetchData();
+  }, [id]);
 
-
-  if (error) return <h2>{error}</h2>;
-  if (!team) return <h2>Loading team details...</h2>;
+  if (error) return <p className="error">{error}</p>;
+  if (!team) return <p className="loading">Loading team...</p>;
 
   return (
-    <div className="page">
-      <h1>{team.name}</h1>
-      <img
-        src={`${import.meta.env.VITE_API}${team.image_url}`}
-        alt={team.name}
-        style={{ width: 400, borderRadius: 8 }}
-      />
-      <p>
-        <strong>Description:</strong> {team.description}
-      </p>
-      <p>
-        <strong>Base:</strong> {team.base_of_operations}
-      </p>
+    <div className="team-detail">
+      <div className="team-detail-header">
+        <h1>{team.name}</h1>
+        {team.image_url && (
+          <img
+            className="team-detail-banner"
+            src={`${import.meta.env.VITE_API}${team.image_url}`}
+            alt={`${team.name} banner`}
+          />
+        )}
+      </div>
 
-      <h2>Mutants in this Team</h2>
-      {team.mutants.length ? (
-        <ul>
+      {/* team info block */}
+      <div className="team-detail-meta">
+        <p><strong>Base of operations:</strong> {team.base_of_operations}</p>
+        <p><strong>Description:</strong> {team.description}</p>
+      </div>
+
+      {/* mutant roster */}
+      <h2 className="mutant-roster-title">Mutants in this team</h2>
+      {team.mutants && team.mutants.length ? (
+        <ul className="mutant-roster">
           {team.mutants.map((m) => (
             <li key={m.id}>
-              <Link to={`/mutants/${m.id}`}>{m.alias}</Link> — {m.name} (
-              {m.status})
+              <Link to={`/mutants/${m.id}`} className="mutant-roster-item">
+                <span>{m.alias}</span>
+                <em>{m.name}</em>
+                <em className={`status-${m.status}`}>({m.status})</em>
+              </Link>
             </li>
           ))}
         </ul>
@@ -57,7 +63,7 @@ useEffect(() => {
         <p>No mutants found for this team.</p>
       )}
 
-     <Link to="/">← Back to Teams</Link>
+      <Link to="/" className="back-link">← Back to Teams</Link>
     </div>
   );
 }
