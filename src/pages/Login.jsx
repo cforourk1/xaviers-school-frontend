@@ -30,7 +30,7 @@ export default function Login({ setCurrentUser }) {
   return (
     <div className="auth-page">
       <div className="auth-card">
-        <h1>Admin Login</h1>
+        <h1>User Login</h1>
         <form className="auth-form" onSubmit={handleSubmit}>
           <label className="auth-label">
             Username
