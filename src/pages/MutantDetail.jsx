@@ -37,7 +37,7 @@ export default function MutantDetails() {
         <strong>Power Description:</strong> {mutant.power_description}
       </p>
       <p>
-        <strong>Bio:</strong> {mutant.bio}
+        <strong>Bio:</strong> {mutant.biography}
       </p>
       <p>
         <strong>Team:</strong> {mutant.team?.name}

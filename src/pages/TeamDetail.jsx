@@ -8,6 +8,9 @@ export default function TeamDetails() {
   const [team, setTeam] = useState(null);
   const [error, setError] = useState(null);
 
+/* updated this useEffect to handle the team info. based on the change made to the junction table on the back end. use effect cannot handle async directly so another function exists inside it. then the try anc catch error to see if the team exists.
+
+*/
 useEffect(() => {
   async function fetchData() {
     try {
