@@ -2,7 +2,7 @@ import React from "react";
 import { Link, useNavigate } from "react-router";
 import "../css/Navbar.css";
 
-export default function Navbar() {
+export default function Navbar({ currentUser, setCurrentUser }) {
   const navigate = useNavigate();
 
   // check if user is logged in by looking for token in sessionStorage
@@ -10,6 +10,8 @@ export default function Navbar() {
 
   function handleLogout() {
     sessionStorage.removeItem("token");
+    // clear the current user from app state on logout
+    setCurrentUser(null);
     navigate("/");
   }
 
@@ -25,10 +27,12 @@ export default function Navbar() {
         <Link to="/">Teams</Link>
         <Link to="/mutants">Mutants</Link>
 
-        {/* show admin link and logout only when logged in */}
         {token ? (
           <>
-            <Link to="/admin">Admin</Link>
+            {/* only show Admin link if user has admin role */}
+            {currentUser?.role === 'admin' && (
+              <Link to="/admin">Admin</Link>
+            )}
             <button onClick={handleLogout} className="logout-btn">
               Logout
             </button>
