@@ -3,7 +3,7 @@ import { useNavigate, Link } from "react-router";
 import { getMutants, createMutant, updateMutant, deleteMutant } from "../api/mutants";
 import "../css/Admin.css";
 
-export default function AdminMutants() {
+export default function AdminMutants({ currentUser }) {
   const navigate = useNavigate();
 
   // get token from sessionStorage - if null redirect to login
@@ -34,6 +34,14 @@ export default function AdminMutants() {
   useEffect(() => {
     getMutants().then(setMutants);
   }, []);
+
+  // helper — returns true if the current user can edit/delete this record
+  // admin can edit anything, regular users can only edit what they created
+  function canEdit(record) {
+    if (!currentUser) return false;
+    if (currentUser.role === 'admin') return true;
+    return record.created_by === currentUser.id;
+  }
 
   // called when the create mutant form is submitted
   // sends form data to backend, adds new mutant to list, resets form
@@ -138,11 +146,14 @@ export default function AdminMutants() {
                 {/* color coded status badge */}
                 <span className={getStatusClass(m.status)}>{m.status}</span>
               </div>
-              <div className="admin-list-item-actions">
-                {/* clicking edit stores this mutant in editingMutant state */}
-                <button className="btn-edit" onClick={() => setEditingMutant(m)}>Edit</button>
-                <button className="btn-delete" onClick={() => handleDeleteMutant(m.id, m.alias)}>Delete</button>
-              </div>
+
+              {/* only show edit/delete if user has permission */}
+              {canEdit(m) && (
+                <div className="admin-list-item-actions">
+                  <button className="btn-edit" onClick={() => setEditingMutant(m)}>Edit</button>
+                  <button className="btn-delete" onClick={() => handleDeleteMutant(m.id, m.alias)}>Delete</button>
+                </div>
+              )}
             </li>
           ))}
         </ul>
@@ -185,7 +196,6 @@ export default function AdminMutants() {
               />
               <div className="form-actions">
                 <button className="btn-primary" type="submit">Save changes</button>
-                {/* cancel clears editingMutant without saving */}
                 <button className="btn-cancel" type="button" onClick={() => setEditingMutant(null)}>Cancel</button>
               </div>
             </form>
