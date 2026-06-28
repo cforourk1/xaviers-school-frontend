@@ -30,7 +30,7 @@ export default function MutantDetails() {
     <div className="page">
       <h1>{mutant.alias}</h1>
       <img
-        src={mutant.image_url}
+        src={`${import.meta.env.VITE_API}${mutant.image_url}`}
         alt={mutant.alias}
         style={{ width: "250px", borderRadius: "8px" }}
       />
