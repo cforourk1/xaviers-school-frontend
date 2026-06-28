@@ -22,14 +22,17 @@
   margin: 0;
 }
 
+/* show full image without cropping */
 .mutant-detail-image {
-  width: 240px;
-  height: 280px;
-  object-fit: cover;
-  object-position: top;
+  width: auto;
+  max-width: 280px;
+  height: auto;
+  max-height: 340px;
+  object-fit: contain;
   border-radius: 10px;
   border: 2px solid rgba(255, 215, 0, 0.3);
   box-shadow: 0 0 20px rgba(255, 215, 0, 0.15);
+  background: rgba(0, 0, 0, 0.3);
 }
 
 .mutant-detail-status {
