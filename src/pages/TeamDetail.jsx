@@ -32,7 +32,7 @@ useEffect(() => {
     <div className="page">
       <h1>{team.name}</h1>
       <img
-        src={team.image_url}
+        src={`${import.meta.env.VITE_API}${team.image_url}`}
         alt={team.name}
         style={{ width: 400, borderRadius: 8 }}
       />
