@@ -30,7 +30,7 @@ export default function Register({ setCurrentUser }) {
   return (
     <div className="auth-page">
       <div className="auth-card">
-        <h1>Create Admin Account</h1>
+        <h1>Create User Account</h1>
         <form className="auth-form" onSubmit={handleSubmit}>
           <label className="auth-label">
             Username
