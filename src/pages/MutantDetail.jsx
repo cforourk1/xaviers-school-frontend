@@ -5,15 +5,22 @@ import { getMutantById } from "../api/mutants";
 export default function MutantDetails() {
   const { id } = useParams();
   const [mutant, setMutant] = useState(null);
+  const [teams, setTeams] = useState([]);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    getMutantById(id)
-      .then(setMutant)
-      .catch((err) => {
+    async function fetchData() {
+      try {
+        const mutantData = await getMutantById(id);
+        setMutant(mutantData);
+        const teamsRes = await fetch(`${import.meta.env.VITE_API}/mutants/${id}/teams`);
+        setTeams(await teamsRes.json());
+      } catch (err) {
         console.error("Failed to fetch mutant:", err);
         setError("Unable to load mutant details.");
-      });
+      }
+    }
+    fetchData();
   }, [id]);
 
   if (error) return <h2>{error}</h2>;
@@ -39,15 +46,21 @@ export default function MutantDetails() {
       <p>
         <strong>Bio:</strong> {mutant.biography}
       </p>
-      <p>
-        <strong>Team:</strong> {mutant.team?.name}
-      </p>
 
-      {mutant.team && (
-        <Link to={`/teams/${mutant.team.id}`}>
-          View {mutant.team.name} Details
-        </Link>
+      <h2>Teams</h2>
+      {teams.length ? (
+        <ul>
+          {teams.map(team => (
+            <li key={team.id}>
+              <Link to={`/teams/${team.id}`}>{team.name}</Link>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p>No teams found.</p>
       )}
+
+      <Link to="/">← Back to Teams</Link>
     </div>
   );
 }
